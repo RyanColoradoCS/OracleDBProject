@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Overdue Items</title>
+</head>
+
+<body>
+
+<h1>Overdue Items</h1>
+
+<table border="1" cellpadding="8">
+
+    <tr>
+        <th>Checkout ID</th>
+        <th>Member</th>
+        <th>Type</th>
+        <th>Item</th>
+        <th>Checkout Date</th>
+        <th>Due Date</th>
+    </tr>
+
+    {% for item in overdue %}
+
+    <tr>
+        <td>{{ item[0] }}</td>
+        <td>{{ item[1] }} {{ item[2] }}</td>
+        <td>{{ item[3] }}</td>
+        <td>{{ item[4] }}</td>
+        <td>{{ item[5] }}</td>
+        <td>{{ item[6] }}</td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+<p><a href="/">Home</a></p>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Members With Overdue Items</title>
+</head>
+
+<body>
+
+<h1>Members With Overdue Items</h1>
+
+<table border="1" cellpadding="8">
+
+    <tr>
+        <th>Member ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Overdue Items</th>
+        <th>Oldest Due Date</th>
+    </tr>
+
+    {% for member in members %}
+
+    <tr>
+        <td>{{ member[0] }}</td>
+        <td>{{ member[1] }} {{ member[2] }}</td>
+        <td>{{ member[3] }}</td>
+        <td>{{ member[4] }}</td>
+        <td>{{ member[5] }}</td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+<p><a href="/">Home</a></p>
+
+</body>
+</html>

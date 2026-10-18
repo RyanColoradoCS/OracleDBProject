@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Books</title>
+</head>
+
+<body>
+
+<h1>Books</h1>
+
+<form method="GET">
+
+    <label>Sort:</label>
+
+    <select name="sort">
+        <option value="title_az">Title A-Z</option>
+        <option value="title_za">Title Z-A</option>
+        <option value="year_new">Newest First</option>
+        <option value="year_old">Oldest First</option>
+    </select>
+
+    <button type="submit">Sort</button>
+
+</form>
+
+<br>
+
+<table border="1" cellpadding="8">
+
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>ISBN</th>
+        <th>Year</th>
+        <th>Publisher</th>
+        <th>Genre</th>
+    </tr>
+
+    {% for book in books %}
+    <tr>
+        <td>{{ book[0] }}</td>
+        <td>{{ book[1] }}</td>
+        <td>{{ book[2] }}</td>
+        <td>{{ book[3] }}</td>
+        <td>{{ book[4] }}</td>
+        <td>{{ book[5] }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+<p><a href="/">Home</a></p>
+
+</body>
+</html>

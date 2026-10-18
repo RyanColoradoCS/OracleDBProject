@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Music</title>
+</head>
+
+<body>
+
+<h1>Music</h1>
+
+<form method="GET">
+
+    <label>Genre:</label>
+
+    <select name="genre_id">
+
+        <option value="">All Genres</option>
+
+        {% for genre in genres %}
+        <option value="{{ genre[0] }}">
+            {{ genre[1] }}
+        </option>
+        {% endfor %}
+
+    </select>
+
+    <button type="submit">Filter</button>
+
+</form>
+
+<br>
+
+<table border="1" cellpadding="8">
+
+    <tr>
+        <th>Title</th>
+        <th>Artist</th>
+        <th>Year</th>
+        <th>Genre</th>
+    </tr>
+
+    {% for cd in cds %}
+
+    <tr>
+        <td>{{ cd[1] }}</td>
+        <td>{{ cd[2] }}</td>
+        <td>{{ cd[3] }}</td>
+        <td>{{ cd[4] }}</td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+<p><a href="/">Home</a></p>
+
+</body>
+</html>

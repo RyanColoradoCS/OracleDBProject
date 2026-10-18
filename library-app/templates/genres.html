@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Genres</title>
+</head>
+
+<body>
+
+<h1>Browse by Genre</h1>
+
+<form method="GET">
+
+    <label for="genre_id">Genre:</label>
+
+    <select name="genre_id" id="genre_id">
+
+        <option value="">Select a Genre</option>
+
+        {% for genre in genres %}
+
+        <option value="{{ genre[0] }}">
+            {{ genre[1] }}
+        </option>
+
+        {% endfor %}
+
+    </select>
+
+    <button type="submit">Search</button>
+
+</form>
+
+{% if items %}
+
+<h2>Results</h2>
+
+<table border="1" cellpadding="8">
+
+    <tr>
+        <th>Type</th>
+        <th>Title</th>
+        <th>Year</th>
+    </tr>
+
+    {% for item in items %}
+    <tr>
+        <td>{{ item[0] }}</td>
+        <td>{{ item[1] }}</td>
+        <td>{{ item[2] }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endif %}
+
+<p><a href="/">Home</a></p>
+
+</body>
+</html>

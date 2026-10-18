@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Members</title>
+</head>
+
+<body>
+
+    <h1>Library Members</h1>
+
+    <form method="GET" action="/members">
+
+        <label for="last_name">Last Name:</label>
+        <input
+            type="text"
+            id="last_name"
+            name="last_name"
+            value="{{ request.args.get('last_name', '') }}"
+        >
+
+        <label for="sort">Sort:</label>
+
+        <select id="sort" name="sort">
+            <option value="az">Last Name A-Z</option>
+            <option value="za">Last Name Z-A</option>
+        </select>
+
+        <button type="submit">Search</button>
+
+    </form>
+
+
+    <table border="1" cellpadding="8">
+
+        <thead>
+            <tr>
+                <th>Member ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Join Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for member in members %}
+
+            <tr>
+                <td>{{ member[0] }}</td>
+                <td>{{ member[1] }}</td>
+                <td>{{ member[2] }}</td>
+                <td>{{ member[3] }}</td>
+                <td>{{ member[4] }}</td>
+                <td>{{ member[5] }}</td>
+                <td>{{ member[6] }}</td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</body>
+</html>
