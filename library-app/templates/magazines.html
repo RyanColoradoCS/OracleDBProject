@@ -8,6 +8,23 @@
 
 <h1>Magazines</h1>
 
+<form method="GET" action="/magazines">
+
+    <label for="sort">Sort by:</label>
+
+    <select name="sort" id="sort">
+        <option value="title_az">Title A-Z</option>
+        <option value="title_za">Title Z-A</option>
+        <option value="date_new">Publication Date - Newest</option>
+        <option value="date_old">Publication Date - Oldest</option>
+        <option value="publisher_az">Publisher A-Z</option>
+        <option value="publisher_za">Publisher Z-A</option>
+    </select>
+
+    <button type="submit">Apply</button>
+
+</form>
+
 <table border="1" cellpadding="8">
 
     <tr>

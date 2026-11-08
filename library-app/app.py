@@ -28,6 +28,8 @@ def members():
         FROM Members
         WHERE 1 = 1
     """
+    # WHERE 1 = 1 is always true and makes it easier to dynamically append additional filters with AND.
+    # It does not change the results by itself.
 
     params = {}
 
@@ -146,10 +148,15 @@ def genres():
 
 @app.route("/magazines")
 def magazines():
+    # Get the selected sort option from the URL
+    # default to title A-Z if none is provided.
+    sort = request.args.get("sort", "title_az")
+
+    # data base connection
     connection = get_connection()
     cursor = connection.cursor()
 
-    cursor.execute("""
+    sql = """
         SELECT
             m.magazine_id,
             m.title,
@@ -159,15 +166,29 @@ def magazines():
         FROM Magazines m
         LEFT JOIN Publishers p
             ON m.publisher_id = p.publisher_id
-        ORDER BY m.publication_date DESC
-    """)
+    """
 
+    if sort == "title_za":
+        sql += " ORDER BY m.title DESC"
+    elif sort == "date_new":
+        sql += " ORDER BY m.publication_date DESC"
+    elif sort == "date_old":
+        sql += " ORDER BY m.publication_date ASC"
+    elif sort == "publisher_az":
+        sql += " ORDER BY p.publisher_name ASC"
+    elif sort == "publisher_za":
+        sql += " ORDER BY p.publisher_name DESC"
+    else:
+        sql += " ORDER BY m.title ASC"
+    
+    cursor.execute(sql)
     rows = cursor.fetchall()
-
+    
     cursor.close()
     connection.close()
 
-    return render_template("magazines.html", magazines=rows)
+    return render_template("magazines.html", magazines=rows)\
+    # matches HTML loop {% for magazine in magazines %}
 
 @app.route("/music")
 def music():

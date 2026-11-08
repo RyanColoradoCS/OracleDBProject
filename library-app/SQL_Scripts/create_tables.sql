@@ -1,6 +1,10 @@
 /* =========================================================
    LIBRARY DATABASE
    Oracle SQL
+
+   This script creates the tables for the library database, 
+   including members, authors, publishers, genres, books, 
+   audiobooks, CDs, and magazines.
    ========================================================= */
 
 
