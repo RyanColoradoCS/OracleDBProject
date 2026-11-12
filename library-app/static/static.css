@@ -1,0 +1,192 @@
+
+:root {
+  color-scheme: dark;
+  --screen: #050b07;
+  --panel: #08130b;
+  --green: #8aff9b;
+  --green-soft: #64c977;
+  --green-dim: #397d4a;
+  --green-bright: #bcffc5;
+  --line: #2a6a3a;
+  --alert: #ffe18b;
+  --font: "Lucida Console", "Courier New", Courier, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { min-height: 100%; background: var(--screen); }
+
+body {
+  position: relative;
+  min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px clamp(16px, 4vw, 54px) 60px;
+  background: var(--screen);
+  color: var(--green);
+  font: 15px/1.65 var(--font);
+  letter-spacing: .025em;
+  text-shadow: 0 0 5px rgba(96, 255, 119, .25);
+}
+
+/* Subtle static CRT scanlines; never intercept clicks. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: .13;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 3px,
+    rgba(0, 0, 0, .8) 4px,
+    transparent 5px
+  );
+}
+
+/* Main screen title and section headings. */
+h1 {
+  margin: 0 0 24px;
+  padding: 16px 10px;
+  border-top: 2px solid var(--green-soft);
+  border-bottom: 2px solid var(--green-soft);
+  color: var(--green-bright);
+  font-size: clamp(19px, 3vw, 29px);
+  line-height: 1.4;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+h1::before { content: "[ "; color: var(--green-soft); }
+h1::after  { content: " ]"; color: var(--green-soft); }
+
+h2, h3 {
+  color: var(--green-bright);
+  font-size: 17px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+h2::before { content: "> "; color: var(--green-soft); }
+
+p { margin: 14px 0; }
+a { color: var(--green-bright); text-decoration: none; border-bottom: 1px dashed var(--green-dim); }
+a:hover, a:focus-visible { background: var(--green); color: var(--screen); text-shadow: none; }
+
+/* Home page menu, including existing unclassed <ul> navigation. */
+ul { max-width: 700px; margin: 18px 0 24px; padding: 0; list-style: none; }
+ul li { margin: 7px 0; border: 1px solid var(--line); background: var(--panel); }
+ul li a { display: block; padding: 9px 14px; border: 0; }
+ul li a::before { content: "> "; color: var(--green-soft); }
+ul li a:hover::before, ul li a:focus-visible::before { color: var(--screen); }
+
+/* GET search/sort/filter forms. */
+form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin: 24px 0;
+  padding: 17px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+}
+form::before {
+  content: "QUERY >";
+  display: block;
+  flex-basis: 100%;
+  color: var(--green-soft);
+  font-size: 12px;
+  letter-spacing: .15em;
+}
+label { color: var(--green-bright); font-weight: bold; }
+
+input, select, textarea, button {
+  max-width: 100%;
+  min-height: 38px;
+  border-radius: 0;
+  font: inherit;
+  letter-spacing: inherit;
+}
+input, select, textarea {
+  padding: 7px 10px;
+  border: 1px solid var(--green-dim);
+  background: #020702;
+  color: var(--green-bright);
+  outline: none;
+}
+input::placeholder, textarea::placeholder { color: var(--green-dim); opacity: 1; }
+input:focus, select:focus, textarea:focus { border-color: var(--green-bright); box-shadow: 0 0 0 1px var(--green-soft); }
+select { cursor: pointer; }
+option { background: var(--screen); color: var(--green); }
+
+button, input[type="submit"], input[type="button"] {
+  padding: 7px 16px;
+  border: 1px solid var(--green-soft);
+  background: #12321a;
+  color: var(--green-bright);
+  cursor: pointer;
+  text-transform: uppercase;
+}
+button:hover, button:focus-visible,
+input[type="submit"]:hover, input[type="button"]:hover {
+  background: var(--green);
+  color: var(--screen);
+  text-shadow: none;
+}
+button:active { transform: translateY(1px); }
+
+/* Oracle result sets — works with existing <table border="1"> markup. */
+table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 22px 0;
+  overflow-x: auto;
+  border: 1px solid var(--green-dim);
+  border-collapse: collapse;
+  background: var(--panel);
+  color: var(--green);
+  font-size: 13px;
+  text-shadow: none;
+}
+th, td {
+  padding: 11px 13px;
+  border: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+th {
+  background: #173d21;
+  color: var(--green-bright);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+tr:nth-child(even) td { background: #0c1e11; }
+tr:hover td { background: #1d4327; color: var(--green-bright); }
+
+/* Useful optional classes for future templates. */
+.terminal-panel { padding: 20px; border: 1px solid var(--green-dim); background: var(--panel); }
+.terminal-banner { color: var(--green-bright); text-align: center; white-space: pre-wrap; }
+.terminal-muted { color: var(--green-soft); }
+.terminal-alert { color: var(--alert); }
+.terminal-status { padding-top: 12px; margin-top: 24px; border-top: 1px dashed var(--green-dim); font-size: 12px; }
+.terminal-cursor::after { content: "_"; display: inline-block; margin-left: 3px; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+::selection { background: var(--green); color: var(--screen); text-shadow: none; }
+:focus-visible { outline: 2px solid var(--green-bright); outline-offset: 3px; }
+
+@media (max-width: 600px) {
+  body { padding: 18px 12px 40px; font-size: 13px; }
+  form { align-items: stretch; }
+  form input, form select { flex: 1 1 160px; }
+  th, td { padding: 8px; font-size: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .terminal-cursor::after { animation: none; }
+}

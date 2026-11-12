@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Member Result</title>
+</head>
+<body>
+
+    {% if success %}
+
+        <h2>Member Submitted Successfully!</h2>
+
+        <p>
+            {{ first_name }} {{ last_name }}
+            was submitted.
+        </p>
+
+    {% else %}
+
+        <h2>Failed to Add Member</h2>
+
+        <p>There was an error processing the member.</p>
+
+    {% endif %}
+
+    <a href="{{ url_for('addmember') }}">
+        Add Another Member
+    </a>
+    <p><a href="/">Home</a></p>
+
+</body>
+</html>

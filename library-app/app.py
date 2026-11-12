@@ -187,7 +187,7 @@ def magazines():
     cursor.close()
     connection.close()
 
-    return render_template("magazines.html", magazines=rows)\
+    return render_template("magazines.html", magazines=rows)
     # matches HTML loop {% for magazine in magazines %}
 
 @app.route("/music")
@@ -331,6 +331,35 @@ def overdue_members():
         "overduemembers.html",
         members=rows
     )
+
+@app.route("/addmembers", methods=["GET", "POST"])
+def addmember():
+
+    if request.method == "POST":
+        first_name = request.form.get("first_name")
+        last_name = request.form.get("last_name")
+
+        return render_template(
+            "memberresult.html",
+            success=True,
+            first_name=first_name,
+            last_name=last_name
+        )
+
+    return render_template("addmembers.html")
+
+
+@app.route("/deletemembers")
+def deletemember():
+    return render_template("deletemembers.html")
+
+@app.route("/memberresult", methods=["GET", "POST"])
+def memberresult():
+    return render_template("memberresult.html")
+
+@app.route("/updatemembers")
+def updatemembers():
+    return render_template("updatemembers.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

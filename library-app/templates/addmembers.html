@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add User</title>
+     <link rel="stylesheet" href="{{ url_for('static', filename='static.css') }}">
+</head>
+
+<body>
+
+<h2>Add New Member</h2>
+
+<form action="/memberresult" method="POST">
+
+    <!-- First Name -->
+    <label for="first_name">First Name:</label>
+    <input
+        type="text"
+        id="first_name"
+        name="first_name"
+        maxlength="100"
+        required
+    >
+
+    <br><br>
+
+    <!-- Last Name -->
+    <label for="last_name">Last Name:</label>
+    <input
+        type="text"
+        id="last_name"
+        name="last_name"
+        maxlength="100"
+        required
+    >
+
+    <br><br>
+
+    <!-- Email -->
+    <label for="email">Email:</label>
+    <input
+        type="email"
+        id="email"
+        name="email"
+        maxlength="255"
+        required
+    >
+
+    <br><br>
+
+    <!-- Phone -->
+    <label for="phone">Phone:</label>
+    <input
+        type="tel"
+        id="phone"
+        name="phone"
+        maxlength="30"
+    >
+
+    <br><br>
+
+    <!-- Membership Status -->
+    <label for="membership_status">Membership Status:</label>
+    <select id="membership_status" name="membership_status">
+        <option value="ACTIVE" selected>Active</option>
+        <option value="INACTIVE">Inactive</option>
+        <option value="SUSPENDED">Suspended</option>
+    </select>
+
+    <br><br>
+
+    <!-- Submit -->
+    <button type="submit">Add Member</button>
+
+</form>
+
+<p><a href="/">Home</a></p>
+
+</body>
+</html>
