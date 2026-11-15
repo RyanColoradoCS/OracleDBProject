@@ -10,11 +10,9 @@
         <h2>Member Submitted Successfully!</h2>
 
         <p>
-            {{ first_name }} {{ last_name }}
-            was submitted.
+            {{ first_name }} {{ last_name }} was submitted.
         </p>
 
-         <a href="/members">View Members</a>
 
     {% else %}
 
@@ -24,8 +22,56 @@
 
     {% endif %}
 
-    <a href="{{ url_for('addmember') }}">Add Another Member</a>
-    <p><a href="/">Home</a></p>
+    
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Member Result</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='static.css') }}">
+</head>
+
+<body>
+
+    <h2>Library Member Management</h2>
+
+    {% if success %}
+
+        <h2>Member Submitted Successfully!</h2>
+
+        <p>
+            {{ first_name }} {{ last_name }}
+            was successfully added to the library.
+        </p>
+
+    {% else %}
+
+        <h2>Failed to Add Member</h2>
+
+        <p>
+            There was an error processing the member.
+        </p>
+
+    {% endif %}
+
+    <div class="terminal-nav">
+
+        <a href="{{ url_for('addmember') }}"
+           class="terminal-button">
+            [ + ADD MEMBER ]
+        </a>
+
+        <a href="{{ url_for('members') }}"
+           class="terminal-button">
+            [ VIEW MEMBERS ]
+        </a>
+
+        <a href="{{ url_for('home') }}"
+           class="terminal-button">
+            [ HOME ]
+        </a>
+
+    </div>
 
 </body>
 </html>

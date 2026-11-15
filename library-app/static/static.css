@@ -190,3 +190,40 @@ tr:hover td { background: #1d4327; color: var(--green-bright); }
 @media (prefers-reduced-motion: reduce) {
   .terminal-cursor::after { animation: none; }
 }
+
+
+/* Retro terminal navigation */
+
+.terminal-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #00ff66;
+}
+
+.terminal-button {
+    display: inline-block;
+    background-color: #001b0a;
+    color: #00ff66;
+    border: 1px solid #00ff66;
+    padding: 12px 20px;
+    text-decoration: none;
+    font-family: "Courier New", monospace;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.terminal-button:hover {
+    background-color: #00ff66;
+    color: #001b0a;
+    box-shadow: 0 0 12px #00ff66;
+}
+
+.terminal-button:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 4px;
+}
