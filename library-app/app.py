@@ -403,7 +403,8 @@ def addmember():
             return render_template(
                 "memberresult.html",
                 success=False,
-                error="Unable to add member."
+                # error="Unable to add member."
+                error=str(e)
             ), 500
 
         finally:
