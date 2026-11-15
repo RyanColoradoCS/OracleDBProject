@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Member Result</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='static.css') }}">
+</head>
+
+<body>
+
+    <h2>Library Member Management</h2>
+
+    {% if success %}
+
+        <h2>Member Deleted Successfully!</h2>
+
+        <p>
+            {{ first_name }} {{ last_name }}
+            was successfully deleted from the library database.
+        </p>
+
+    {% else %}
+
+        <h2>Failed to Delete Member</h2>
+
+        <p>
+            There was an error deleting the member.
+        </p>
+
+        {% if error %}
+            <p>{{ error }}</p>
+        {% endif %}
+
+    {% endif %}
+
+    <div class="terminal-nav">
+
+        <a href="{{ url_for('deletemember') }}"
+           class="terminal-button">
+            [ DELETE ANOTHER MEMBER ]
+        </a>
+
+        <a href="{{ url_for('members') }}"
+           class="terminal-button">
+            [ VIEW MEMBERS ]
+        </a>
+
+        <a href="{{ url_for('home') }}"
+           class="terminal-button">
+            [ HOME ]
+        </a>
+
+    </div>
+
+</body>
+</html>

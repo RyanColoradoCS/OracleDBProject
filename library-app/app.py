@@ -418,7 +418,31 @@ def addmember():
 
 @app.route("/deletemembers")
 def deletemember():
-    return render_template("deletemembers.html")
+
+    # Connect to Oracle
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    # Retrieve members for the dropdown
+    cursor.execute("""
+        SELECT
+            member_id,
+            first_name,
+            last_name,
+            email
+        FROM Members
+        ORDER BY last_name, first_name
+    """)
+
+    members = cursor.fetchall()
+
+    cursor.close()
+    connection.close()
+
+    return render_template(
+        "deletemembers.html",
+        members=members
+    )
 
 @app.route("/memberresult", methods=["GET", "POST"])
 def memberresult():
@@ -426,6 +450,26 @@ def memberresult():
 
 @app.route("/updatemembers")
 def updatemembers():
+    # Connect to Oracle
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    # Retrieve members for the dropdown
+    cursor.execute("""
+        SELECT
+            member_id,
+            first_name,
+            last_name,
+            email
+        FROM Members
+        ORDER BY last_name, first_name
+    """)
+
+    members = cursor.fetchall()
+
+    cursor.close()
+    connection.close()
+
     return render_template("updatemembers.html")
 
 if __name__ == "__main__":

@@ -7,9 +7,47 @@
 
 <body>
 
-<h1>Delete Members</h1>
+    <h2>Library Member Management</h2>
+    <h3>Delete Members</h3>
 
-<p><a href="/">Home</a></p>
+    <h3>Select a Member to Delete</h3>
+
+    <p>Choose a member from the database.</p>
+
+    <form>
+
+        <label for="member_id">Member:</label>
+
+        <select id="member_id" name="member_id">
+
+            <option value="">-- Select a Member --</option>
+
+            {% for member in members %}
+
+                <option value="{{ member[0] }}">
+                    {{ member[2] }}, {{ member[1] }}
+                    ({{ member[3] }})
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+    </form>
+
+    <div class="terminal-nav">
+
+        <a href="{{ url_for('members') }}"
+           class="terminal-button">
+            [ VIEW MEMBERS ]
+        </a>
+
+        <a href="{{ url_for('home') }}"
+           class="terminal-button">
+            [ HOME ]
+        </a>
+
+    </div>
 
 </body>
 </html>

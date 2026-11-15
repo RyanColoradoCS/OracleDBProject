@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Member Result</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='static.css') }}">
+</head>
+
+<body>
+
+    <h2>Library Member Management</h2>
+
+    {% if success %}
+
+        <h2>Member Updated Successfully!</h2>
+
+        <p>
+            {{ first_name }} {{ last_name }}
+            was successfully updated in the library database.
+        </p>
+
+    {% else %}
+
+        <h2>Failed to Update Member</h2>
+
+        <p>
+            There was an error updating the member.
+        </p>
+
+        {% if error %}
+            <p>{{ error }}</p>
+        {% endif %}
+
+    {% endif %}
+
+    <div class="terminal-nav">
+
+        <a href="{{ url_for('updatemembers') }}"
+           class="terminal-button">
+            [ UPDATE ANOTHER MEMBER ]
+        </a>
+
+        <a href="{{ url_for('members') }}"
+           class="terminal-button">
+            [ VIEW MEMBERS ]
+        </a>
+
+        <a href="{{ url_for('home') }}"
+           class="terminal-button">
+            [ HOME ]
+        </a>
+
+    </div>
+
+</body>
+</html>
