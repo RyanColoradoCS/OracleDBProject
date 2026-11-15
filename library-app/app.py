@@ -394,7 +394,7 @@ def addmember():
                 last_name=last_name
             )
 
-        except Exception:
+        except Exception as e:
             if connection:
                 connection.rollback()
 
@@ -403,8 +403,8 @@ def addmember():
             return render_template(
                 "memberresult.html",
                 success=False,
-                # error="Unable to add member."
-                error=str(e)
+                error="Unable to add member."
+                # error=str(e)
             ), 500
 
         finally:
