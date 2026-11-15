@@ -470,7 +470,7 @@ def updatemembers():
     cursor.close()
     connection.close()
 
-    return render_template("updatemembers.html")
+    return render_template("updatemembers.html", members=members)
 
 if __name__ == "__main__":
     app.run(debug=True)
