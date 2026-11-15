@@ -541,6 +541,7 @@ def deletemember():
 def memberresult():
     return render_template("memberresult.html")
 
+'''
 @app.route("/updatemembers")
 def updatemembers():
     # Connect to Oracle
@@ -564,6 +565,161 @@ def updatemembers():
     connection.close()
 
     return render_template("updatemembers.html", members=members)
+'''
+
+
+@app.route("/updatemembers", methods=["GET", "POST"])
+def updatemembers():
+
+    connection = None
+    cursor = None
+
+    try:
+        connection = get_connection()
+        cursor = connection.cursor()
+
+        # POST: Update the selected member
+        if request.method == "POST":
+
+            member_id = request.form.get("member_id", type=int)
+            first_name = request.form.get("first_name", "").strip()
+            last_name = request.form.get("last_name", "").strip()
+            email = request.form.get("email", "").strip()
+            phone = request.form.get("phone", "").strip()
+            membership_status = request.form.get(
+                "membership_status", ""
+            )
+
+            # Validate the form
+            if (
+                member_id is None
+                or not first_name
+                or not last_name
+                or not email
+                or membership_status not in (
+                    "ACTIVE", "INACTIVE", "SUSPENDED"
+                )
+                or len(first_name) > 100
+                or len(last_name) > 100
+                or len(email) > 255
+                or len(phone) > 30
+            ):
+                return render_template(
+                    "memberresultupdate.html",
+                    success=False,
+                    error="Invalid member information."
+                ), 400
+
+            # Update member in Oracle
+            cursor.execute("""
+                UPDATE Members
+                SET
+                    first_name = :first_name,
+                    last_name = :last_name,
+                    email = :email,
+                    phone = :phone,
+                    membership_status = :membership_status
+                WHERE member_id = :member_id
+            """, {
+                "first_name": first_name,
+                "last_name": last_name,
+                "email": email,
+                "phone": phone or None,
+                "membership_status": membership_status,
+                "member_id": member_id
+            })
+
+            # Verify the member existed
+            if cursor.rowcount == 0:
+                connection.rollback()
+
+                return render_template(
+                    "memberresultupdate.html",
+                    success=False,
+                    error="Member not found."
+                ), 404
+
+            # Save changes
+            connection.commit()
+
+            return render_template(
+                "memberresultupdate.html",
+                success=True,
+                first_name=first_name,
+                last_name=last_name
+            )
+
+        # GET: Retrieve all members for dropdown
+        cursor.execute("""
+            SELECT
+                member_id,
+                first_name,
+                last_name,
+                email
+            FROM Members
+            ORDER BY last_name, first_name
+        """)
+
+        members = cursor.fetchall()
+
+        # Check if a member was selected
+        member_id = request.args.get("member_id", type=int)
+
+        selected_member = None
+
+        if member_id is not None:
+
+            cursor.execute("""
+                SELECT
+                    member_id,
+                    first_name,
+                    last_name,
+                    email,
+                    phone,
+                    membership_status
+                FROM Members
+                WHERE member_id = :member_id
+            """, {"member_id": member_id})
+
+            selected_member = cursor.fetchone()
+
+        return render_template(
+            "updatemembers.html",
+            members=members,
+            selected_member=selected_member
+        )
+
+    except oracledb.IntegrityError:
+        if connection:
+            connection.rollback()
+
+        app.logger.exception("Member update constraint error")
+
+        return render_template(
+            "memberresultupdate.html",
+            success=False,
+            error="Unable to update member. The email may already exist."
+        ), 409
+
+    except Exception:
+        if connection:
+            connection.rollback()
+
+        app.logger.exception("Failed to update member")
+
+        return render_template(
+            "memberresultupdate.html",
+            success=False,
+            error="Unable to update member."
+        ), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+
+        if connection:
+            connection.close()
+
 
 @app.route("/activemembers")
 def activemembers():
