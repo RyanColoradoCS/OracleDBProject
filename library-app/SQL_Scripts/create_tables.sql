@@ -363,3 +363,25 @@ CREATE TABLE Fines (
             'WAIVED'
         ))
 );
+
+/* =========================================================
+   13. DATABASE VIEWS
+   ========================================================= */
+
+   /* =========================================================
+   13.1 ACTIVE MEMBERS VIEW
+   Returns all members with ACTIVE status
+   This will have its own HTML page to get active mebers only
+   ========================================================= */
+
+CREATE OR REPLACE VIEW active_members AS
+SELECT
+    member_id,
+    first_name,
+    last_name,
+    email,
+    phone,
+    join_date,
+    membership_status
+FROM Members
+WHERE membership_status = 'ACTIVE';
