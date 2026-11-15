@@ -720,7 +720,21 @@ def updatemembers():
         if connection:
             connection.close()
 
+# This utilizes the view to display active members only
 
+'''
+CREATE OR REPLACE VIEW active_members AS
+SELECT
+    member_id,
+    first_name,
+    last_name,
+    email,
+    phone,
+    join_date,
+    membership_status
+FROM Members
+WHERE membership_status = 'ACTIVE';
+'''
 @app.route("/activemembers")
 def activemembers():
 
