@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from db import get_connection
+import oracledb
 
 app = Flask(__name__)
 
@@ -360,6 +361,7 @@ def addmember():
                 success=False,
                 error="Invalid member information."
             ), 400
+        # 400 is a Bad Request error (HTTP status code)
 
         connection = None
         cursor = None
@@ -416,33 +418,124 @@ def addmember():
 
     return render_template("addmembers.html")
 
-@app.route("/deletemembers")
+# @app.route("/deletemembers")
+@app.route("/deletemembers", methods=["GET", "POST"])
 def deletemember():
 
-    # Connect to Oracle
-    connection = get_connection()
-    cursor = connection.cursor()
+    connection = None
+    cursor = None
 
-    # Retrieve members for the dropdown
-    cursor.execute("""
-        SELECT
-            member_id,
-            first_name,
-            last_name,
-            email
-        FROM Members
-        ORDER BY last_name, first_name
-    """)
+    try:
+        connection = get_connection()
+        cursor = connection.cursor()
 
-    members = cursor.fetchall()
+        if request.method == "POST":
 
-    cursor.close()
-    connection.close()
+            member_id = request.form.get("member_id", type=int)
 
-    return render_template(
-        "deletemembers.html",
-        members=members
-    )
+            if member_id is None:
+                return render_template(
+                    "memberresultdelete.html",
+                    success=False,
+                    error="Please select a valid member."
+                ), 400
+
+            # Find the member before deleting using SQL select by member id
+            cursor.execute("""
+                SELECT first_name, last_name
+                FROM Members
+                WHERE member_id = :member_id
+            """, {"member_id": member_id})
+            # Dictionary that maps the placeholder name to the actual Python value
+            # In this case, ":member_id" in the SQL query is mapped to the Python variable "member_id"
+
+            # Fetch the member details from the database based on the member_id
+            member = cursor.fetchone()
+
+            # Check if the member exists in the database
+            if member is None:
+                return render_template(
+                    "memberresultdelete.html",
+                    success=False,
+                    error="Member not found."
+                ), 404
+
+            cursor.execute("""
+                DELETE FROM Members
+                WHERE member_id = :member_id
+            """, {"member_id": member_id})
+
+            if cursor.rowcount == 0:
+                connection.rollback()
+
+                return render_template(
+                    "memberresultdelete.html",
+                    success=False,
+                    error="Member was not deleted."
+                ), 404
+
+            connection.commit()
+
+            return render_template(
+                "memberresultdelete.html",
+                success=True,
+                first_name=member[0],
+                last_name=member[1]
+            )
+
+        # This gets all the members from the database for the dropdown (if not a post request)
+        cursor.execute("""
+            SELECT
+                member_id,
+                first_name,
+                last_name,
+                email
+            FROM Members
+            ORDER BY last_name, first_name
+        """)
+
+        members = cursor.fetchall()
+
+        return render_template(
+            "deletemembers.html",
+            members=members
+        )
+
+    except oracledb.IntegrityError:
+        if connection:
+            connection.rollback()
+
+        app.logger.exception("Oracle constraint prevented member deletion")
+
+        return render_template(
+            "memberresultdelete.html",
+            success=False,
+            error="This member cannot be deleted because related library records exist."
+        ), 409
+
+    except Exception:
+        if connection:
+            connection.rollback()
+
+        app.logger.exception("Failed to delete member")
+
+        return render_template(
+            "memberresultdelete.html",
+            success=False,
+            error="Unable to delete member."
+        ), 500
+
+    # Close the database connection and cursor
+    finally:
+        if cursor:
+            cursor.close()
+
+        if connection:
+            connection.close()
+            
+
+
+
 
 @app.route("/memberresult", methods=["GET", "POST"])
 def memberresult():

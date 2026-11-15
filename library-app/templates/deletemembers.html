@@ -14,7 +14,7 @@
 
     <p>Choose a member from the database.</p>
 
-    <form>
+    <form action="{{ url_for('deletemember') }}" method="POST">
 
         <label for="member_id">Member:</label>
 
@@ -32,6 +32,9 @@
             {% endfor %}
 
         </select>
+
+        <!-- Submit -->
+        <button type="submit">Delete Member</button>
 
     </form>
 

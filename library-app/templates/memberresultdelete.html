@@ -25,12 +25,8 @@
         <h2>Failed to Delete Member</h2>
 
         <p>
-            There was an error deleting the member.
+            {{ error or "There was an error deleting the member." }}
         </p>
-
-        {% if error %}
-            <p>{{ error }}</p>
-        {% endif %}
 
     {% endif %}
 
@@ -52,6 +48,5 @@
         </a>
 
     </div>
-
 </body>
 </html>
