@@ -565,5 +565,56 @@ def updatemembers():
 
     return render_template("updatemembers.html", members=members)
 
+@app.route("/activemembers")
+def activemembers():
+
+    last_name = request.args.get("last_name")
+    sort = request.args.get("sort", "az")
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    sql = """
+        SELECT
+            member_id,
+            first_name,
+            last_name,
+            email,
+            phone,
+            join_date,
+            membership_status
+        FROM active_members
+        WHERE 1 = 1
+    """
+    # WHERE 1 = 1 is always true and makes it easier to dynamically append additional filters with AND.
+    # It does not change the results by itself.
+
+    params = {}
+
+    if last_name:
+        sql += """
+            AND UPPER(last_name) LIKE UPPER(:last_name)
+        """
+
+        params["last_name"] = "%" + last_name + "%"
+
+    if sort == "za":
+        sql += " ORDER BY last_name DESC"
+    else:
+        sql += " ORDER BY last_name ASC"
+
+    cursor.execute(sql, params)
+
+    rows = cursor.fetchall()
+
+    cursor.close()
+    connection.close()
+
+    return render_template(
+        "activemembers.html",
+        members=rows
+    )
+
+
 if __name__ == "__main__":
     app.run(debug=True)

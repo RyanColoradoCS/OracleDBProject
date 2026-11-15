@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Active Library Members</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='static.css') }}">
+</head>
+
+<body>
+
+    <h1>Active Library Members</h1>
+
+    <p>Displaying members with ACTIVE membership status.</p>
+
+    <!-- Search and sort active members -->
+    <form method="GET"
+          action="{{ url_for('activemembers') }}">
+
+        <!-- Search by last name -->
+        <label for="last_name">Last Name:</label>
+
+        <input
+            type="text"
+            id="last_name"
+            name="last_name"
+            value="{{ request.args.get('last_name', '') }}"
+            placeholder="Search by last name"
+        >
+
+        <!-- Sort members -->
+        <label for="sort">Sort:</label>
+
+        <select id="sort" name="sort">
+
+            <option value="az"
+                {% if request.args.get('sort', 'az') == 'az' %}
+                    selected
+                {% endif %}>
+                Last Name A-Z
+            </option>
+
+            <option value="za"
+                {% if request.args.get('sort') == 'za' %}
+                    selected
+                {% endif %}>
+                Last Name Z-A
+            </option>
+
+        </select>
+
+        <button type="submit">Search</button>
+
+    </form>
+
+    <!-- Active Members Table -->
+    <table border="1" cellpadding="8">
+
+        <thead>
+            <tr>
+                <th>Member ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Join Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for member in members %}
+
+            <tr>
+                <td>{{ member[0] }}</td>
+                <td>{{ member[1] }}</td>
+                <td>{{ member[2] }}</td>
+                <td>{{ member[3] }}</td>
+                <td>{{ member[4] or '' }}</td>
+                <td>
+                    {{ member[5].strftime('%Y-%m-%d') }}
+                </td>
+                <td>{{ member[6] }}</td>
+            </tr>
+
+            {% else %}
+
+            <tr>
+                <td colspan="7">
+                    No active members found.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    <!-- Navigation Buttons -->
+    <div class="terminal-nav">
+
+        <a href="{{ url_for('members') }}"
+           class="terminal-button">
+            [ ALL MEMBERS ]
+        </a>
+
+        <a href="{{ url_for('addmember') }}"
+           class="terminal-button">
+            [ + ADD MEMBER ]
+        </a>
+
+        <a href="{{ url_for('home') }}"
+           class="terminal-button">
+            [ HOME ]
+        </a>
+
+    </div>
+
+</body>
+</html>
