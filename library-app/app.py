@@ -336,18 +336,84 @@ def overdue_members():
 def addmember():
 
     if request.method == "POST":
-        first_name = request.form.get("first_name")
-        last_name = request.form.get("last_name")
+        '''
+        .get("first_name", "") Looks up the key "first_name". If the field is missing, 
+        it returns the default "" instead of raising a KeyError..strip()Removes any 
+        leading and trailing whitespace from the value.
+        '''
+        # Get the values submitted from the HTML form, clean up whitespace
+        first_name = request.form.get("first_name", "").strip()
+        last_name = request.form.get("last_name", "").strip()
+        email = request.form.get("email", "").strip()
+        phone = request.form.get("phone", "").strip()
+        membership_status = request.form.get("membership_status", "ACTIVE")
 
-        return render_template(
-            "memberresult.html",
-            success=True,
-            first_name=first_name,
-            last_name=last_name
-        )
+        # Validate the submitted values
+        if (
+            not first_name
+            or not last_name
+            or not email
+            or membership_status not in ("ACTIVE", "INACTIVE", "SUSPENDED")
+        ):
+            return render_template(
+                "memberresult.html",
+                success=False,
+                error="Invalid member information."
+            ), 400
+
+        connection = None
+        cursor = None
+
+        try:
+            # Connect to Oracle, call function in db.py
+            connection = get_connection()
+            cursor = connection.cursor()
+
+            # Insert the new member
+            sql = """
+                INSERT INTO Members ( first_name, last_name, email, phone, membership_status)
+                VALUES (:first_name, :last_name, :email, :phone, :membership_status)
+            """
+            cursor.execute(
+                sql,
+                {
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "email": email,
+                    "phone": phone or None,
+                    "membership_status": membership_status
+                }
+            )
+            # Save the changes to the Oracle DB
+            connection.commit()
+
+            return render_template(
+                "memberresult.html",
+                success=True,
+                first_name=first_name,
+                last_name=last_name
+            )
+
+        except Exception:
+            if connection:
+                connection.rollback()
+
+            app.logger.exception("Failed to add member")
+
+            return render_template(
+                "memberresult.html",
+                success=False,
+                error="Unable to add member."
+            ), 500
+
+        finally:
+            if cursor:
+                cursor.close()
+
+            if connection:
+                connection.close()
 
     return render_template("addmembers.html")
-
 
 @app.route("/deletemembers")
 def deletemember():
